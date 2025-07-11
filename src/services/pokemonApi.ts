@@ -1,13 +1,35 @@
-import { Pokemon, PokemonListResponse, PokemonSpecies } from '@/types/pokemon';
+import { Pokemon, PokemonListResponse, PokemonSpecies, EvolutionChain, Move } from '@/types/pokemon';
+import localForage from 'localforage';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 
 class PokemonAPI {
   private cache = new Map<string, any>();
 
+  constructor() {
+    // Initialize localForage for persistent caching
+    localForage.config({
+      name: 'PokedexCache',
+      storeName: 'pokemon_data',
+      description: 'Cached Pokemon data for offline access'
+    });
+  }
+
   private async fetchWithCache<T>(url: string): Promise<T> {
+    // Check memory cache first
     if (this.cache.has(url)) {
       return this.cache.get(url);
+    }
+
+    // Check persistent cache
+    try {
+      const cached = await localForage.getItem<T>(url);
+      if (cached) {
+        this.cache.set(url, cached);
+        return cached;
+      }
+    } catch (error) {
+      console.warn('Failed to read from persistent cache:', error);
     }
 
     try {
@@ -17,7 +39,15 @@ class PokemonAPI {
       }
       
       const data = await response.json();
+      
+      // Store in both caches
       this.cache.set(url, data);
+      try {
+        await localForage.setItem(url, data);
+      } catch (error) {
+        console.warn('Failed to write to persistent cache:', error);
+      }
+      
       return data;
     } catch (error) {
       console.error(`Error fetching ${url}:`, error);
@@ -37,6 +67,18 @@ class PokemonAPI {
     return this.fetchWithCache(`${BASE_URL}/pokemon-species/${nameOrId}`);
   }
 
+  async getEvolutionChain(id: number): Promise<EvolutionChain> {
+    return this.fetchWithCache(`${BASE_URL}/evolution-chain/${id}`);
+  }
+
+  async getMove(nameOrId: string | number): Promise<Move> {
+    return this.fetchWithCache(`${BASE_URL}/move/${nameOrId}`);
+  }
+
+  async getEvolutionChainFromUrl(url: string): Promise<EvolutionChain> {
+    return this.fetchWithCache(url);
+  }
+
   async searchPokemon(query: string): Promise<Pokemon[]> {
     const { results } = await this.getPokemonList(1000);
     const filtered = results.filter(pokemon => 
@@ -48,6 +90,45 @@ class PokemonAPI {
     );
     
     return Promise.all(promises);
+  }
+
+  // Advanced filtering methods
+  async filterPokemonByType(type: string, generation?: number): Promise<Pokemon[]> {
+    const limit = generation ? 151 : 1000; // Adjust based on generation
+    const { results } = await this.getPokemonList(limit);
+    
+    const pokemonPromises = results.map(async (item) => {
+      try {
+        return await this.getPokemon(item.name);
+      } catch {
+        return null;
+      }
+    });
+
+    const pokemonList = await Promise.all(pokemonPromises);
+    return pokemonList
+      .filter((p): p is Pokemon => p !== null)
+      .filter(p => type === 'all' || p.types.some(t => t.type.name === type));
+  }
+
+  async filterPokemonByStats(minTotal: number = 0, maxTotal: number = 1000): Promise<Pokemon[]> {
+    const { results } = await this.getPokemonList(500);
+    
+    const pokemonPromises = results.map(async (item) => {
+      try {
+        return await this.getPokemon(item.name);
+      } catch {
+        return null;
+      }
+    });
+
+    const pokemonList = await Promise.all(pokemonPromises);
+    return pokemonList
+      .filter((p): p is Pokemon => p !== null)
+      .filter(p => {
+        const total = p.stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+        return total >= minTotal && total <= maxTotal;
+      });
   }
 
   getTypeColor(type: string): string {

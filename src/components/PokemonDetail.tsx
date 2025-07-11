@@ -7,6 +7,9 @@ import { Progress } from '@/components/ui/progress';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, Ruler, Weight, Zap, Heart, Shield, Sword, TrendingUp } from 'lucide-react';
+import { StatChart } from '@/components/StatChart';
+import { EvolutionChainView } from '@/components/EvolutionChainView';
+import { MovesList } from '@/components/MovesList';
 
 interface PokemonDetailProps {
   pokemon: Pokemon;
@@ -57,8 +60,13 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
     return name.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  const handlePokemonClick = (pokemon: Pokemon) => {
+    // This will be handled by the parent component
+    console.log('Navigate to:', pokemon.name);
+  };
+
   return (
-    <div className="max-w-4xl mx-auto p-4 animate-fade-in">
+    <div className="max-w-6xl mx-auto p-4 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Button variant="ghost" onClick={onBack} className="p-2">
@@ -73,7 +81,7 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
       </div>
 
       {/* Main Content */}
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8 mb-8">
         {/* Left Column - Image & Basic Info */}
         <div className="space-y-6">
           {/* Pokemon Image */}
@@ -131,7 +139,7 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
           </Card>
         </div>
 
-        {/* Right Column - Detailed Info */}
+        {/* Right Column - Description & Radar Chart */}
         <div className="space-y-6">
           {/* Description */}
           <Card className="p-4">
@@ -141,80 +149,117 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
             </p>
           </Card>
 
-          {/* Tabs for Additional Info */}
-          <Tabs defaultValue="stats" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="stats">Base Stats</TabsTrigger>
-              <TabsTrigger value="abilities">Abilities</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="stats" className="space-y-4">
-              <Card className="p-4">
-                <h3 className="font-semibold mb-4">Base Stats</h3>
-                <div className="space-y-4">
-                  {pokemon.stats.map((stat) => (
-                    <div key={stat.stat.name} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          {getStatIcon(stat.stat.name)}
-                          <span className="text-sm font-medium">
-                            {formatStatName(stat.stat.name)}
-                          </span>
-                        </div>
-                        <span className="text-sm font-bold">
-                          {stat.base_stat}
-                        </span>
-                      </div>
-                      <Progress 
-                        value={(stat.base_stat / 200) * 100} 
-                        className="h-2"
-                      />
-                    </div>
-                  ))}
-                  
-                  {/* Total Stats */}
-                  <div className="pt-2 border-t border-border">
-                    <div className="flex items-center justify-between font-semibold">
-                      <span>Total</span>
-                      <span>
-                        {pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="abilities" className="space-y-4">
-              <Card className="p-4">
-                <h3 className="font-semibold mb-4">Abilities</h3>
-                <div className="space-y-3">
-                  {pokemon.abilities.map((abilityInfo, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
-                    >
-                      <div>
-                        <div className="font-medium capitalize">
-                          {abilityInfo.ability.name.replace('-', ' ')}
-                        </div>
-                        {abilityInfo.is_hidden && (
-                          <div className="text-xs text-muted-foreground">
-                            Hidden Ability
-                          </div>
-                        )}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Slot {abilityInfo.slot}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          {/* Stats Radar Chart */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Base Stats Radar</h3>
+            <StatChart 
+              stats={pokemon.stats.map(stat => ({
+                name: stat.stat.name.replace('-', ' '),
+                value: stat.base_stat,
+                max: 200
+              }))}
+            />
+            <div className="mt-2 text-center text-sm text-muted-foreground">
+              Total: {pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0)}
+            </div>
+          </Card>
         </div>
       </div>
+
+      {/* Detailed Tabs Section */}
+      <Tabs defaultValue="stats" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="stats">Detailed Stats</TabsTrigger>
+          <TabsTrigger value="abilities">Abilities</TabsTrigger>
+          <TabsTrigger value="moves">Moves</TabsTrigger>
+          <TabsTrigger value="evolution">Evolution</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="stats" className="space-y-4">
+          <Card className="p-4">
+            <h3 className="font-semibold mb-4">Base Stats Breakdown</h3>
+            <div className="space-y-4">
+              {pokemon.stats.map((stat) => (
+                <div key={stat.stat.name} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {getStatIcon(stat.stat.name)}
+                      <span className="text-sm font-medium">
+                        {formatStatName(stat.stat.name)}
+                      </span>
+                    </div>
+                    <span className="text-sm font-bold">
+                      {stat.base_stat}
+                    </span>
+                  </div>
+                  <Progress 
+                    value={(stat.base_stat / 200) * 100} 
+                    className="h-2"
+                  />
+                </div>
+              ))}
+              
+              {/* Total Stats */}
+              <div className="pt-2 border-t border-border">
+                <div className="flex items-center justify-between font-semibold">
+                  <span>Total</span>
+                  <span>
+                    {pokemon.stats.reduce((sum, stat) => sum + stat.base_stat, 0)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="abilities" className="space-y-4">
+          <Card className="p-4">
+            <h3 className="font-semibold mb-4">Abilities</h3>
+            <div className="space-y-3">
+              {pokemon.abilities.map((abilityInfo, index) => (
+                <div 
+                  key={index}
+                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
+                >
+                  <div>
+                    <div className="font-medium capitalize">
+                      {abilityInfo.ability.name.replace('-', ' ')}
+                    </div>
+                    {abilityInfo.is_hidden && (
+                      <div className="text-xs text-muted-foreground">
+                        Hidden Ability
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Slot {abilityInfo.slot}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="moves" className="space-y-4">
+          <MovesList moves={pokemon.moves} />
+        </TabsContent>
+
+        <TabsContent value="evolution" className="space-y-4">
+          {species?.evolution_chain?.url ? (
+            <EvolutionChainView 
+              evolutionChainUrl={species.evolution_chain.url}
+              onPokemonClick={handlePokemonClick}
+            />
+          ) : (
+            <Card className="p-6">
+              <h3 className="font-semibold mb-4">Evolution Chain</h3>
+              <p className="text-muted-foreground">
+                {loading ? 'Loading evolution data...' : 'No evolution data available'}
+              </p>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

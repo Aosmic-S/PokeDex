@@ -55,6 +55,7 @@ export interface Pokemon {
     name: string;
     url: string;
   };
+  moves: PokemonMove[];
 }
 
 export interface PokemonListItem {
@@ -89,4 +90,95 @@ export interface PokemonSpecies {
       url: string;
     };
   }[];
+}
+
+export interface EvolutionDetail {
+  item: { name: string; url: string } | null;
+  trigger: { name: string; url: string };
+  gender: number | null;
+  held_item: { name: string; url: string } | null;
+  known_move: { name: string; url: string } | null;
+  known_move_type: { name: string; url: string } | null;
+  location: { name: string; url: string } | null;
+  min_affection: number | null;
+  min_beauty: number | null;
+  min_happiness: number | null;
+  min_level: number | null;
+  needs_overworld_rain: boolean;
+  party_species: { name: string; url: string } | null;
+  party_type: { name: string; url: string } | null;
+  relative_physical_stats: number | null;
+  time_of_day: string;
+  trade_species: { name: string; url: string } | null;
+  turn_upside_down: boolean;
+}
+
+export interface EvolutionChainLink {
+  is_baby: boolean;
+  species: { name: string; url: string };
+  evolution_details: EvolutionDetail[];
+  evolves_to: EvolutionChainLink[];
+}
+
+export interface EvolutionChain {
+  id: number;
+  baby_trigger_item: { name: string; url: string } | null;
+  chain: EvolutionChainLink;
+}
+
+export interface Move {
+  id: number;
+  name: string;
+  accuracy: number | null;
+  power: number | null;
+  pp: number;
+  priority: number;
+  damage_class: {
+    name: string;
+    url: string;
+  };
+  type: {
+    name: string;
+    url: string;
+  };
+  effect_entries: {
+    effect: string;
+    language: {
+      name: string;
+      url: string;
+    };
+  }[];
+  flavor_text_entries: {
+    flavor_text: string;
+    language: {
+      name: string;
+      url: string;
+    };
+  }[];
+}
+
+export interface PokemonMove {
+  move: {
+    name: string;
+    url: string;
+  };
+  version_group_details: {
+    level_learned_at: number;
+    move_learn_method: {
+      name: string;
+      url: string;
+    };
+    version_group: {
+      name: string;
+      url: string;
+    };
+  }[];
+}
+
+export interface TeamPokemon {
+  id: string;
+  pokemon: Pokemon;
+  nickname?: string;
+  level: number;
+  nature?: string;
 }
