@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Pokemon } from '@/types/pokemon';
 import { pokemonApi } from '@/services/pokemonApi';
 import { PokemonCard } from './PokemonCard';
 import { PokemonDetail } from './PokemonDetail';
 import { SearchBar } from './SearchBar';
+import { AchievementNotification } from './AchievementNotification';
 import { Button } from '@/components/ui/button';
-import { Loader2, Zap } from 'lucide-react';
+import { Loader2, Zap, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAchievementStore, Achievement } from '@/stores/achievementStore';
+import { Link } from 'react-router-dom';
 
 export const Pokedex = () => {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
@@ -16,7 +20,9 @@ export const Pokedex = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [newAchievement, setNewAchievement] = useState<Achievement | null>(null);
   const { toast } = useToast();
+  const { incrementStat } = useAchievementStore();
 
   const POKEMON_PER_PAGE = 20;
 
@@ -88,6 +94,7 @@ export const Pokedex = () => {
 
   const handlePokemonClick = (pokemon: Pokemon) => {
     setSelectedPokemon(pokemon);
+    incrementStat('pokemonViewed');
   };
 
   const handleBackToList = () => {
@@ -134,16 +141,35 @@ export const Pokedex = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <AchievementNotification 
+        achievement={newAchievement} 
+        onClose={() => setNewAchievement(null)} 
+      />
+      
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border">
+      <motion.div 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border"
+      >
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-2">
-              <Zap className="h-8 w-8 text-primary glow" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <Zap className="h-8 w-8 text-primary glow" />
+              </motion.div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                PokéDex
+                PokédexX
               </h1>
             </div>
+            <Link to="/admin">
+              <Button variant="ghost" size="sm">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </Link>
           </div>
           
           <SearchBar 
@@ -152,15 +178,24 @@ export const Pokedex = () => {
             selectedType={selectedType}
           />
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="container mx-auto px-4 py-6"
+      >
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center py-20"
+          >
             <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
             <p className="text-lg text-muted-foreground">Loading Pokémon...</p>
-          </div>
+          </motion.div>
         ) : (
           <>
             {/* Results Count */}
@@ -190,20 +225,30 @@ export const Pokedex = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
-                  {paginatedPokemon.map((pokemon, index) => (
-                    <div 
-                      key={pokemon.id} 
-                      className="animate-fade-in"
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
-                      <PokemonCard 
-                        pokemon={pokemon} 
-                        onClick={handlePokemonClick}
-                      />
-                    </div>
-                  ))}
-                </div>
+                <motion.div 
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ staggerChildren: 0.05 }}
+                >
+                  <AnimatePresence>
+                    {paginatedPokemon.map((pokemon, index) => (
+                      <motion.div
+                        key={pokemon.id}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        <PokemonCard 
+                          pokemon={pokemon} 
+                          onClick={handlePokemonClick}
+                        />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
 
                 {/* Load More / Pagination */}
                 <div className="flex justify-center">
@@ -231,7 +276,7 @@ export const Pokedex = () => {
             )}
           </>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

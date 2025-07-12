@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Pokemon, PokemonSpecies } from '@/types/pokemon';
 import { pokemonApi } from '@/services/pokemonApi';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { ArrowLeft, Ruler, Weight, Zap, Heart, Shield, Sword, TrendingUp } from 
 import { StatChart } from '@/components/StatChart';
 import { EvolutionChainView } from '@/components/EvolutionChainView';
 import { MovesList } from '@/components/MovesList';
+import { HolographicDisplay } from '@/components/HolographicDisplay';
 
 interface PokemonDetailProps {
   pokemon: Pokemon;
@@ -66,7 +68,11 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 animate-fade-in">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-6xl mx-auto p-4"
+    >
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Button variant="ghost" onClick={onBack} className="p-2">
@@ -84,7 +90,7 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
       <div className="grid lg:grid-cols-2 gap-8 mb-8">
         {/* Left Column - Image & Basic Info */}
         <div className="space-y-6">
-          {/* Pokemon Image */}
+          {/* Holographic Pokemon Display */}
           <Card className="pokemon-card relative overflow-hidden">
             <div 
               className={`absolute inset-0 opacity-20 type-${primaryType}`}
@@ -92,11 +98,10 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
                 background: `linear-gradient(135deg, var(--type-${primaryType}), transparent)` 
               }}
             />
-            <div className="relative p-8 flex justify-center">
-              <img
-                src={pokemon.sprites.other['official-artwork']?.front_default || pokemon.sprites.front_default}
-                alt={pokemon.name}
-                className="w-48 h-48 object-contain drop-shadow-2xl animate-bounce-in"
+            <div className="relative p-8">
+              <HolographicDisplay 
+                pokemon={pokemon} 
+                className="w-48 h-48 mx-auto"
               />
             </div>
           </Card>
@@ -260,6 +265,6 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 };
