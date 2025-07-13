@@ -30,7 +30,7 @@ const Admin = () => {
   const { achievements, stats } = useAchievementStore();
   const { teams } = useTeamStore();
   
-  const correctPassword = 'hynx2025'; // Simple auth for demo
+  const correctPassword = 'AURA@DEX'; // Updated password
   
   useEffect(() => {
     // Calculate cache size (rough estimation)

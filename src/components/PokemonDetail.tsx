@@ -142,6 +142,31 @@ export const PokemonDetail = ({ pokemon, onBack }: PokemonDetailProps) => {
               </div>
             </div>
           </Card>
+
+          {/* Anime Series Info */}
+          <Card className="p-4">
+            <h3 className="font-semibold mb-3">Anime Series</h3>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Series:</span>
+                <Badge variant="outline" className="text-primary">
+                  {pokemon.series || 'Unknown'}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Season:</span>
+                <Badge variant="outline" className="text-accent">
+                  {pokemon.season || 'Unknown'}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Generation:</span>
+                <Badge variant="secondary">
+                  Gen {pokemon.generation || 'Unknown'}
+                </Badge>
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Right Column - Description & Radar Chart */}

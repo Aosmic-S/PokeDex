@@ -37,7 +37,7 @@ export const Pokedex = () => {
   const loadInitialPokemon = async () => {
     try {
       setLoading(true);
-      const { results } = await pokemonApi.getPokemonList(151); // First generation
+      const { results } = await pokemonApi.getPokemonList(1025); // All Pokemon
       
       const pokemonPromises = results.map(async (item) => {
         return await pokemonApi.getPokemon(item.name);

@@ -60,7 +60,8 @@ class PokemonAPI {
   }
 
   async getPokemon(nameOrId: string | number): Promise<Pokemon> {
-    return this.fetchWithCache(`${BASE_URL}/pokemon/${nameOrId}`);
+    const pokemon = await this.fetchWithCache(`${BASE_URL}/pokemon/${nameOrId}`);
+    return this.enrichPokemonData(pokemon);
   }
 
   async getPokemonSpecies(nameOrId: string | number): Promise<PokemonSpecies> {
@@ -154,6 +155,44 @@ class PokemonAPI {
     };
     
     return typeColors[type] || typeColors.normal;
+  }
+  
+  // Add anime series/season data based on Pokemon ID
+  private enrichPokemonData(pokemon: any): Pokemon {
+    const generation = this.getGeneration(pokemon.id);
+    const seriesInfo = this.getSeriesInfo(pokemon.id);
+    
+    return {
+      ...pokemon,
+      generation,
+      series: seriesInfo.series,
+      season: seriesInfo.season
+    };
+  }
+  
+  private getGeneration(id: number): number {
+    if (id <= 151) return 1;
+    if (id <= 251) return 2;
+    if (id <= 386) return 3;
+    if (id <= 493) return 4;
+    if (id <= 649) return 5;
+    if (id <= 721) return 6;
+    if (id <= 809) return 7;
+    if (id <= 905) return 8;
+    return 9;
+  }
+  
+  private getSeriesInfo(id: number): { series: string; season: string } {
+    // Based on Pokemon generations and anime series
+    if (id <= 151) return { series: "Indigo League", season: "Season 1-2" };
+    if (id <= 251) return { series: "Johto", season: "Season 3-5" };
+    if (id <= 386) return { series: "Advanced", season: "Season 6-9" };
+    if (id <= 493) return { series: "Diamond & Pearl", season: "Season 10-13" };
+    if (id <= 649) return { series: "Black & White", season: "Season 14-16" };
+    if (id <= 721) return { series: "XY", season: "Season 17-19" };
+    if (id <= 809) return { series: "Sun & Moon", season: "Season 20-22" };
+    if (id <= 905) return { series: "Journeys", season: "Season 23-25" };
+    return { series: "Horizons", season: "Season 26+" };
   }
 }
 

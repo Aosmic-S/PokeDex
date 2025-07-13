@@ -56,6 +56,10 @@ export interface Pokemon {
     url: string;
   };
   moves: PokemonMove[];
+  // Added anime series info
+  series?: string;
+  season?: string;
+  generation?: number;
 }
 
 export interface PokemonListItem {
