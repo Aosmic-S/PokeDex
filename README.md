@@ -1,32 +1,71 @@
-# 🧿 PokéDex
-
-**PokéDex** is a modern, digital encyclopedia of Pokémon built using the official [PokéAPI](https://pokeapi.co). Inspired by the anime's Pokédex design, it offers real-time data, sprite animations, evolution chains, and detailed Pokémon stats — all within a sleek, responsive interface.
-
-> 🌐 Live Demo: [pokedec.vercel.app](https://pokedec.vercel.app)
-
----
-
-## 🔮 Features
-
-- 🔍 **Search & Filter** by name, type, generation, or stats
-- 📄 **Detailed Pokémon Profiles**
-  - Name, ID, Types, Stats, Abilities
-  - Evolution Chains, Move Sets, Encounters
-  - Weight, Height, Sprites (animated)
-- ⚡ **Holographic Display** (Pokédex-style UI)
-- 🌙 **Dark Mode + Type-based Colors**
-- 🧠 **Offline Caching** (IndexedDB for repeated calls)
-- 💼 **Admin Panel** (for control over data & UI modules)
-- 🛠 **Team Builder** module (save custom squads)
-- 🎉 **First-Time User Welcome Modal**
-- 🧾 Built with: React.js, Tailwind CSS, Zustand, Framer Motion
+<div align="center">
+  <img src="https://raw.githubusercontent.com/WEB-SOUL819/aura-dex-nexus/main/src/assets/logo.png" alt="PokéDex Logo" width="160"/>
+  <h1>PokéDex</h1>
+  <p>
+    <strong>A high-performance, PokéAPI-powered Pokémon encyclopedia</strong><br/>
+    Built with React, Tailwind, Zustand, and Framer Motion • By Hynx Studios
+  </p>
+  <a href="https://pokedec.vercel.app" target="_blank">
+    🔗 pokedec.vercel.app
+  </a>
+</div>
 
 ---
 
-## 🚀 Getting Started
+## ⚡ Overview
+
+**PokéDex** is a futuristic, dark-themed digital encyclopedia of all Pokémon, designed with performance, aesthetics, and functionality in mind. Inspired by the anime’s Pokédex and engineered with modern web technology, it offers powerful search tools, detailed Pokémon stats, animated sprites, evolution trees, and team building — all within a sleek and responsive interface.
+
+---
+
+## 🚀 Live Demo
+
+👉 **[Visit PokéDex → pokedec.vercel.app](https://pokedec.vercel.app)**  
+PWA-enabled. Mobile-first. Fully offline-capable.
+
+---
+
+## 🧩 Features
+
+- 🔍 Advanced Search: Find Pokémon by name, type, generation, or base stats
+- 📊 Stat Breakdown: HP, Attack, Defense, Special Stats, Speed
+- 🔄 Evolution Chains: Full tree-based evolution view
+- 🌀 Animated Sprites & Type Badging
+- 🧬 Abilities, Moves, Encounters
+- ⚒️ Team Builder: Build & save Pokémon squads locally
+- 🔒 Admin Panel: Module control and analytics
+- 💾 Offline Support with IndexedDB
+- 👋 First-Time Welcome Modal
+- 🌑 Clean Dark Mode & Pokédex-Themed UI
+
+---
+
+## 📦 Tech Stack
+
+| Layer            | Tech                                     |
+|------------------|------------------------------------------|
+| Frontend         | React.js                                 |
+| Styling          | Tailwind CSS                             |
+| State Mgmt       | Zustand                                  |
+| Animations       | Framer Motion                            |
+| Data             | [PokéAPI](https://pokeapi.co)            |
+| Offline Support  | IndexedDB (`idb-keyval`)                 |
+| Deployment       | Vercel (PWA ready)                       |
+
+---
+
+## 🖼️ Screenshots
+
+| Home View | Pokémon Profile | Team Builder |
+|-----------|------------------|---------------|
+| ![Home](https://pokedec.vercel.app/preview/home.png) | ![Profile](https://pokedec.vercel.app/preview/profile.png) | ![Builder](https://pokedec.vercel.app/preview/builder.png) |
+
+---
+
+## 🛠️ Getting Started
 
 ```bash
-git clone https://github.com/your-repo/pokedex.git
-cd pokedex
+git clone https://github.com/WEB-SOUL819/aura-dex-nexus.git
+cd aura-dex-nexus
 npm install
 npm run dev
