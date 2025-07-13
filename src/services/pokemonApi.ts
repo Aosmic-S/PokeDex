@@ -55,7 +55,7 @@ class PokemonAPI {
     }
   }
 
-  async getPokemonList(limit: number = 151, offset: number = 0): Promise<PokemonListResponse> {
+  async getPokemonList(limit: number = 1025, offset: number = 0): Promise<PokemonListResponse> {
     return this.fetchWithCache(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
   }
 
@@ -80,7 +80,7 @@ class PokemonAPI {
   }
 
   async searchPokemon(query: string): Promise<Pokemon[]> {
-    const { results } = await this.getPokemonList(1000);
+    const { results } = await this.getPokemonList(1025);
     const filtered = results.filter(pokemon => 
       pokemon.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -94,7 +94,7 @@ class PokemonAPI {
 
   // Advanced filtering methods
   async filterPokemonByType(type: string, generation?: number): Promise<Pokemon[]> {
-    const limit = generation ? 151 : 1000; // Adjust based on generation
+    const limit = generation ? 151 : 1025; // Adjust based on generation
     const { results } = await this.getPokemonList(limit);
     
     const pokemonPromises = results.map(async (item) => {
@@ -112,7 +112,7 @@ class PokemonAPI {
   }
 
   async filterPokemonByStats(minTotal: number = 0, maxTotal: number = 1000): Promise<Pokemon[]> {
-    const { results } = await this.getPokemonList(500);
+    const { results } = await this.getPokemonList(1025);
     
     const pokemonPromises = results.map(async (item) => {
       try {
