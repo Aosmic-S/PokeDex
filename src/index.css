@@ -93,6 +93,69 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Theme Variants */
+  .theme-light {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  .theme-fire {
+    --background: 12 100% 6%;
+    --foreground: 12 100% 95%;
+    --primary: 12 76% 61%;
+    --accent: 25 85% 55%;
+    --card: 12 50% 10%;
+    --border: 12 50% 15%;
+  }
+
+  .theme-water {
+    --background: 211 100% 8%;
+    --foreground: 211 100% 95%;
+    --primary: 211 85% 63%;
+    --accent: 200 85% 55%;
+    --card: 211 50% 10%;
+    --border: 211 50% 15%;
+  }
+
+  .theme-electric {
+    --background: 53 100% 8%;
+    --foreground: 53 100% 95%;
+    --primary: 53 98% 64%;
+    --accent: 48 95% 55%;
+    --card: 53 50% 10%;
+    --border: 53 50% 15%;
+  }
+
+  .theme-psychic {
+    --background: 322 100% 8%;
+    --foreground: 322 100% 95%;
+    --primary: 322 88% 67%;
+    --accent: 310 85% 60%;
+    --card: 322 50% 10%;
+    --border: 322 50% 15%;
+  }
+
+  /* Special Admin Theme - Anime Dexter */
+  .theme-admin {
+    --background: 120 100% 2%;
+    --foreground: 120 100% 95%;
+    --primary: 120 100% 25%;
+    --accent: 90 100% 50%;
+    --card: 120 50% 8%;
+    --border: 120 50% 15%;
+    --dexter-glow: 120 100% 50%;
+    --dexter-screen: 195 100% 15%;
+    
+    /* Special admin-only gradients */
+    --gradient-dexter: linear-gradient(135deg, hsl(120 100% 25%), hsl(90 100% 50%));
+    --shadow-dexter: 0 0 30px hsl(120 100% 50% / 0.5);
+  }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -199,5 +262,41 @@ All colors MUST be HSL.
 
   .transition-bounce {
     transition: var(--transition-bounce);
+  }
+
+  /* Admin Theme Special Effects */
+  .theme-admin .dexter-glow {
+    box-shadow: var(--shadow-dexter);
+    border: 1px solid hsl(var(--dexter-glow));
+  }
+
+  .theme-admin .dexter-screen {
+    background: var(--gradient-dexter);
+    box-shadow: inset 0 0 20px hsl(var(--dexter-screen));
+  }
+
+  /* Settings Panel Styles */
+  .settings-card {
+    @apply bg-card/90 backdrop-blur-md border border-border/50 rounded-lg;
+    transition: var(--transition-smooth);
+  }
+
+  .settings-card:hover {
+    @apply border-primary/30;
+    box-shadow: 0 8px 32px hsl(var(--primary) / 0.1);
+  }
+
+  /* Theme Preview Cards */
+  .theme-preview {
+    @apply w-full h-16 rounded-lg border-2 transition-all duration-300;
+  }
+
+  .theme-preview:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .theme-preview.selected {
+    @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
 }

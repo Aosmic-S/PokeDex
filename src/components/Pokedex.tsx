@@ -6,6 +6,7 @@ import { PokemonCard } from './PokemonCard';
 import { PokemonDetail } from './PokemonDetail';
 import { SearchBar } from './SearchBar';
 import { AchievementNotification } from './AchievementNotification';
+import { SettingsPanel } from './SettingsPanel';
 import { Button } from '@/components/ui/button';
 import { Loader2, Zap, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +22,8 @@ export const Pokedex = () => {
   const [selectedType, setSelectedType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
   const { incrementStat } = useAchievementStore();
 
@@ -28,6 +31,9 @@ export const Pokedex = () => {
 
   useEffect(() => {
     loadInitialPokemon();
+    // Check if user is admin
+    const adminAuth = localStorage.getItem('admin-auth');
+    setIsAdmin(adminAuth === 'true');
   }, []);
 
   useEffect(() => {
@@ -165,11 +171,20 @@ export const Pokedex = () => {
                 PokédexX
               </h1>
             </div>
-            <Link to="/admin">
-              <Button variant="ghost" size="sm">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setSettingsOpen(true)}
+              >
                 <Settings className="h-4 w-4" />
               </Button>
-            </Link>
+              <Link to="/admin">
+                <Button variant="ghost" size="sm">
+                  Admin
+                </Button>
+              </Link>
+            </div>
           </div>
           
           <SearchBar 
@@ -277,6 +292,14 @@ export const Pokedex = () => {
           </>
         )}
       </motion.div>
+      
+      <AnimatePresence>
+        <SettingsPanel 
+          isOpen={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+          isAdmin={isAdmin}
+        />
+      </AnimatePresence>
     </div>
   );
 };
