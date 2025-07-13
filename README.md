@@ -1,5 +1,4 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/WEB-SOUL819/aura-dex-nexus/main/src/assets/logo.png" alt="PokéDex Logo" width="160"/>
+
   <h1>PokéDex</h1>
   <p>
     <strong>A high-performance, PokéAPI-powered Pokémon encyclopedia</strong><br/>
@@ -54,11 +53,6 @@ PWA-enabled. Mobile-first. Fully offline-capable.
 
 ---
 
-## 🖼️ Screenshots
-
-| Home View | Pokémon Profile | Team Builder |
-|-----------|------------------|---------------|
-| ![Home](https://pokedec.vercel.app/preview/home.png) | ![Profile](https://pokedec.vercel.app/preview/profile.png) | ![Builder](https://pokedec.vercel.app/preview/builder.png) |
 
 ---
 
