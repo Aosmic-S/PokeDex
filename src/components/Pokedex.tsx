@@ -7,8 +7,9 @@ import { PokemonDetail } from './PokemonDetail';
 import { SearchBar } from './SearchBar';
 import { AchievementNotification } from './AchievementNotification';
 import { SettingsPanel } from './SettingsPanel';
+import { TeamBuilder } from './TeamBuilder';
 import { Button } from '@/components/ui/button';
-import { Loader2, Zap, Settings } from 'lucide-react';
+import { Loader2, Zap, Settings, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAchievementStore, Achievement } from '@/stores/achievementStore';
 import { Link } from 'react-router-dom';
@@ -23,6 +24,7 @@ export const Pokedex = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [newAchievement, setNewAchievement] = useState<Achievement | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [teamBuilderOpen, setTeamBuilderOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
   const { incrementStat } = useAchievementStore();
@@ -175,6 +177,13 @@ export const Pokedex = () => {
               <Button 
                 variant="ghost" 
                 size="sm"
+                onClick={() => setTeamBuilderOpen(true)}
+              >
+                <Users className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
                 onClick={() => setSettingsOpen(true)}
               >
                 <Settings className="h-4 w-4" />
@@ -298,6 +307,15 @@ export const Pokedex = () => {
           isOpen={settingsOpen}
           onClose={() => setSettingsOpen(false)}
           isAdmin={isAdmin}
+        />
+        <TeamBuilder
+          isOpen={teamBuilderOpen}
+          onClose={() => setTeamBuilderOpen(false)}
+          availablePokemon={pokemon}
+          onSelectPokemon={(pokemon) => {
+            setSelectedPokemon(pokemon);
+            setTeamBuilderOpen(false);
+          }}
         />
       </AnimatePresence>
     </div>

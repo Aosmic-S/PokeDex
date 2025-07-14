@@ -75,7 +75,7 @@ const themes = [
   { id: 'water', name: 'Ocean Blue', color: 'hsl(211 85% 63%)', description: 'Deep as the ocean depths' },
   { id: 'electric', name: 'Thunder Yellow', color: 'hsl(53 98% 64%)', description: 'Electric-type energy' },
   { id: 'psychic', name: 'Mystic Purple', color: 'hsl(322 88% 67%)', description: 'Psychic powers theme' },
-  { id: 'admin', name: 'Dexter OS', color: 'hsl(120 100% 25%)', description: 'Admin-only anime Pokédex theme', adminOnly: true }
+  { id: 'admin', name: 'Pokedex Red', color: 'hsl(0 84% 60%)', description: 'Admin-only classic red Pokédex theme', adminOnly: true }
 ];
 
 interface SettingsPanelProps {
@@ -166,13 +166,13 @@ export const SettingsPanel = ({ isOpen, onClose, isAdmin = false }: SettingsPane
         root.style.setProperty('--accent', '310 85% 60%');
         break;
       case 'admin':
-        // Special anime Dexter theme
-        root.style.setProperty('--background', '120 100% 2%');
-        root.style.setProperty('--foreground', '120 100% 95%');
-        root.style.setProperty('--primary', '120 100% 25%');
-        root.style.setProperty('--accent', '90 100% 50%');
-        root.style.setProperty('--card', '120 50% 8%');
-        root.style.setProperty('--border', '120 50% 15%');
+        // Special red Pokédex theme
+        root.style.setProperty('--background', '0 100% 2%');
+        root.style.setProperty('--foreground', '0 100% 95%');
+        root.style.setProperty('--primary', '0 84% 60%');
+        root.style.setProperty('--accent', '15 90% 55%');
+        root.style.setProperty('--card', '0 50% 8%');
+        root.style.setProperty('--border', '0 50% 15%');
         break;
       default:
         // Reset to default theme

@@ -68,14 +68,28 @@ export const PokemonCard = ({ pokemon, onClick }: PokemonCardProps) => {
         </div>
 
         {/* Quick Stats */}
-        <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-          <div className="text-center">
-            <div className="font-medium">Height</div>
-            <div>{(pokemon.height / 10).toFixed(1)}m</div>
+        <div className="mt-3 space-y-2">
+          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+            <div className="text-center">
+              <div className="font-medium">Height</div>
+              <div>{(pokemon.height / 10).toFixed(1)}m</div>
+            </div>
+            <div className="text-center">
+              <div className="font-medium">Weight</div>
+              <div>{(pokemon.weight / 10).toFixed(1)}kg</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="font-medium">Weight</div>
-            <div>{(pokemon.weight / 10).toFixed(1)}kg</div>
+          
+          {/* Additional Info */}
+          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+            <div className="text-center">
+              <div className="font-medium">Base XP</div>
+              <div>{pokemon.base_experience || 'N/A'}</div>
+            </div>
+            <div className="text-center">
+              <div className="font-medium">Generation</div>
+              <div className="capitalize">{pokemon.generation || 'I'}</div>
+            </div>
           </div>
         </div>
       </div>
